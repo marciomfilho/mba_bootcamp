@@ -25,10 +25,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        run: terraform -chdir=prod init
+        run: terraform -chdir=envs/prod init
 
       - name: Terraform Validate
-        run: terraform -chdir=prod validate
+        run: terraform -chdir=envs/prod validate
 
       - name: Terraform Apply
-        run: terraform -chdir=prod apply -auto-approve
+        run: terraform -chdir=envs/prod apply -auto-approve
