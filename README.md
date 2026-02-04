@@ -119,3 +119,5 @@ CloudWatch alarms, log groups e dashboards
 Secrets Manager e KMS
 
 Integrar com repositório de aplicações (tracknow-services) e registry ECR, permitindo que o pipeline de aplicação faça deploy automático para o ECS provisionado por este IaC.
+
+OBS: Esqueleto 
