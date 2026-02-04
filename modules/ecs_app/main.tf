@@ -252,4 +252,5 @@ resource "aws_ecs_service" "rastreamento" {
   name            = "svc-rastreamento"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.rastreamento.arn
-  des
+  desired_count.  = var.desired_count_rastreamento
+}
