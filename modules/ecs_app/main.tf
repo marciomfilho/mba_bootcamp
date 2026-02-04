@@ -33,11 +33,11 @@ resource "aws_security_group" "ecs_tasks" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description      = "App traffic from ALB"
-    from_port        = local.service_port
-    to_port          = local.service_port
-    protocol         = "tcp"
-    security_groups  = [aws_security_group.alb.id]
+    description     = "App traffic from ALB"
+    from_port       = local.service_port
+    to_port         = local.service_port
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
   }
 
   egress {
@@ -230,7 +230,7 @@ resource "aws_ecs_service" "pedidos" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets         = var.private_app_subnets
+    subnets          = var.private_app_subnets
     assign_public_ip = false
     security_groups  = [aws_security_group.ecs_tasks.id]
   }
