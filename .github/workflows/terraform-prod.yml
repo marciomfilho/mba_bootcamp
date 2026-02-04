@@ -22,9 +22,6 @@ jobs:
       - name: Check caller identity
         run: aws sts get-caller-identity
 
-      - name: Test EC2 CreateVpc dry-run
-        run: aws ec2 create-vpc --cidr-block 10.0.0.0/16 --dry-run
-
       - uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
