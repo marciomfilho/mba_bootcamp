@@ -8,11 +8,6 @@ terraform {
     }
   }
 }
-
-provider "aws" {
-  region = "sa-east-1"
-}
-
 module "vpc" {
   source = "../../modules/vpc"
 
