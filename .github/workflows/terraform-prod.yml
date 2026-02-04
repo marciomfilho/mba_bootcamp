@@ -36,10 +36,10 @@ jobs:
         with:
           terraform_version: 1.6.6
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials (LabRole)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE_ARN }}
+          role-to-assume: arn:aws:iam::167582247690:role/LabRole
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform FMT
@@ -54,17 +54,19 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform validate
 
-      - name: Terraform Plan
+      # Apenas plano em pull request (sem apply)
+      - name: Terraform Plan (PR)
         if: github.event_name == 'pull_request'
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan -input=false -no-color
 
-      - name: Terraform Plan & Save
+      # Em push na main: plan + apply automático
+      - name: Terraform Plan & Save (push)
         if: github.event_name == 'push'
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan -input=false -out=tfplan
 
-      - name: Terraform Apply
+      - name: Terraform Apply (push)
         if: github.event_name == 'push'
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform apply -input=false -auto-approve tfplan
