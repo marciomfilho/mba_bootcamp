@@ -20,27 +20,24 @@ env:
 
 jobs:
   terraform:
-    name: Terraform Plan & Apply (Prod)
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      id-token: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Configure AWS Credentials (Lab static credentials)
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.6
-
-      - name: Configure AWS Credentials (LabRole)
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::167582247690:role/LabRole
-          aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform FMT
         working-directory: ${{ env.TF_WORKING_DIR }}
@@ -54,13 +51,11 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform validate
 
-      # Apenas plano em pull request (sem apply)
       - name: Terraform Plan (PR)
         if: github.event_name == 'pull_request'
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan -input=false -no-color
 
-      # Em push na main: plan + apply automático
       - name: Terraform Plan & Save (push)
         if: github.event_name == 'push'
         working-directory: ${{ env.TF_WORKING_DIR }}
